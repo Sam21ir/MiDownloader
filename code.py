@@ -13,17 +13,22 @@ while True:
             path=input("Download path (type \"default\" for download video in current path) : ").lower()
             if path=="default":
                 print(f"downloading : {url.title}")
-                url.streams.get_highest_resolution.download()
+                url.streams.get_highest_resolution().download()
+                url.register_on_complete_callback(print("Download is done! "))
             else:
                 print(f"downloading : {url.title}")
-                url.streams.get_highest_resolution.download(output_path=path)
+                url.streams.get_highest_resolution().download(output_path=path)
+                url.register_on_complete_callback(print("Download is done! "))
         elif download_option == 2:
             path=input("Download path (type \"default\" for download video in current path) : ").lower()
             if path=="default":
                 print(f"downloading : {url.title}")
-                url.streams.get_lowest_resolution.download()
+                url.streams.get_lowest_resolution().download()
+                url.register_on_complete_callback(print("Download is done! "))
             else:
-                url.streams.get_lowest_resolution.download(output_path=path)
+                print(f"downloading : {url.title}")
+                url.streams.get_lowest_resolution().download(output_path=path)
+                url.register_on_complete_callback(print("Download is done! "))
         elif download_option == 3:
             advance_option=int(input("what Do you want :\n1.Thumbnail link\n2.Infos(title,description,rating,views,length,etc)\n> option : "))
             if advance_option==1:print(f"Thumbnail URL : {url.thumbnail_url}")
@@ -44,21 +49,25 @@ while True:
             if path=="default":
                 for video in path.videos:
                     print(f"downloading : {video.title}")
-                    video.streams.get_highest_resolution.download()
+                    video.streams.get_highest_resolution().download()
+                    video.register_on_complete_callback(print("Download is done! "))
             else:
                 for video in path.videos:
                     print(f"downloading : {video.title}")
-                    video.streams.get_highest_resolution.download(output_path=path)
+                    video.streams.get_highest_resolution().download(output_path=path)
+                    video.register_on_complete_callback(print("Download is done! "))
         elif download_option == 2:
             path=input("Download path (type \"default\" for download video in current path) : ").lower()
             if path=="default":
                 for video in url.videos:
                     print(f"downloading : {video.title}")
-                    video.streams.get_lowest_resolution.download()
+                    video.streams.get_lowest_resolution().download()
+                    video.register_on_complete_callback(print("Download is done! "))
             else:
                 for video in url.videos:
                     print(f"downloading : {video.title}")
-                    video.streams.get_lowest_resolution.download(output_path=path)
+                    video.streams.get_lowest_resolution().download(output_path=path)
+                    video.register_on_complete_callback(print("Download is done! "))
     else:
         print("Restart the script. You have entered the wrong option !")
 
