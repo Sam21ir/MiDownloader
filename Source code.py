@@ -1,0 +1,13 @@
+from pytube import YouTube as ytb
+#video=ytb(input("enter the video url :"))
+video=ytb("https://www.youtube.com/watch?v=wtFPIOV2bWM")
+print('===================================')
+print(video.title)
+print('===================================')
+print(video.description)
+print('===================================')
+print(video.rating)
+print('===================================')
+print(video.views)
+print('===================================')
+print(video.length)
