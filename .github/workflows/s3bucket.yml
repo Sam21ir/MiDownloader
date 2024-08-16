@@ -45,10 +45,25 @@ jobs:
                 "BlockPublicPolicy": false,
                 "RestrictPublicBuckets": false
               }'
-  
+      - name: Add Bucket Policy
+        run: |
+          aws s3api put-bucket-policy \
+              --bucket github-actions-video-downloader \
+              --policy '{
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": "*",
+                      "Action": "s3:GetObject",
+                      "Resource": "arn:aws:s3:::github-actions-video-downloader/*"
+                    }
+                  ]
+              }'
+            
       - name: Deploy Python script to S3 bucket
         run: |
-          aws s3 cp ./code.py s3://github-actions-video-downloader/code.py --acl public-read
+          aws s3 cp ./code.py s3://github-actions-video-downloader/code.py
   
       - name: Display S3 URL
         run: |
