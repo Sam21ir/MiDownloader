@@ -1,0 +1,56 @@
+on:
+    push:
+      branches:
+        - main
+        - dev
+        - test
+  
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+  
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.x'
+  
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+  
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: eu-north-1
+  
+        - name: Create S3 Bucket
+          run: |
+            aws s3api create-bucket \
+              --bucket github-actions-video-downloader \
+              --region eu-north-1 \
+              --create-bucket-configuration LocationConstraint=eu-north-1
+  
+            aws s3api put-public-access-block \
+              --bucket github-actions-video-downloader \
+              --public-access-block-configuration '{
+                "BlockPublicAcls": false,
+                "IgnorePublicAcls": false,
+                "BlockPublicPolicy": false,
+                "RestrictPublicBuckets": false
+              }'
+  
+        - name: Deploy Python script to S3 bucket
+          run: |
+            aws s3 cp ./code.py s3://github-actions-video-downloader/code.py --acl public-read
+  
+        - name: Display S3 URL
+          run: |
+            echo "Your Python script is available at https://github-actions-video-downloader.s3.eu-north-1.amazonaws.com/code.py"
+  
